@@ -1,9 +1,9 @@
 const myLibrary = []
 
-function Book(title, author, publisher) {
+function Book(title, author, pages) {
     this.title = title
     this.author = author
-    this.publisher = publisher
+    this.pages = pages
 }
 
 function addBookToLibrary(addedBook) {
@@ -12,65 +12,118 @@ function addBookToLibrary(addedBook) {
 
 let library = document.querySelector('.library-container')
 
+let liamsAdventures = new Book('liams adventures', 'liam', '324')
+let samsAdventures = new Book('sams adventures', 'sam', "202")
+addBookToLibrary(liamsAdventures)
+addBookToLibrary(samsAdventures)
 
-let book1 = new Book('liams adventures', 'liam', 'spacediaries')
-let book2 = new Book('sams adventures', 'sam', 'earthdiaries')
-addBookToLibrary(book1)
-addBookToLibrary(book2)
+let displayBooks = function () {
+    //remove all old books in order to properly reload
+    library.innerHTML = ''
+
+    //Creating all books inside the area
+    let books = myLibrary.map(function (book, index) {
+
+        // Create a newbook with the 'book' class
+        const newBook = document.createElement('div')
+        newBook.classList.add('book')
+
+        // Adding title to the element
+        let bookTitle = document.createElement('p')
+        bookTitle.textContent = book.title
+
+        // Adding author to the element
+        let bookAuthor = document.createElement('p')
+        bookAuthor.textContent = book.author
+
+        // Adding publisher to the element
+        let bookPages = document.createElement('p')
+        bookPages.textContent = book.pages
+
+        // Read button
+        let readButton = document.createElement('button')
+        readButton.textContent = 'Read'
+        readButton.style.backgroundColor = 'darkred'
+
+        //removeButton
+        let removeButton = document.createElement('button')
+        removeButton.textContent = 'Remove'
+
+        // myLibrary.forEach()
+        removeButton.addEventListener('click', () => {
+            myLibrary.splice(index, 1)
+            displayBooks()
+        })
+
+        readButton.addEventListener('click', () => {
+            if (readButton.style.backgroundColor == 'darkred') {
+                readButton.style.backgroundColor = 'green'
+            } else {
+                readButton.style.backgroundColor = 'darkred'
+            }
+        })
+
+        // Appending all elements
+        newBook.appendChild(bookTitle)
+        newBook.appendChild(bookAuthor)
+        newBook.appendChild(bookPages)
+        newBook.appendChild(readButton)
+        newBook.appendChild(removeButton)
+
+        return newBook
+    })
+
+    // Displaying every created book
+    books.forEach(function (book) {
+        library.appendChild(book)
+    })
+}
+
+// books.
+displayBooks()
 
 
-//Displaying array of books
-let books = myLibrary.map(function (book) {
-    // Create a newbook with the 'book' class
-    const newBook = document.createElement('div')
-    newBook.classList.add('book')
+let titleInput = document.getElementById('title')
+let authorInput = document.getElementById('author')
+let pagesInput = document.getElementById("pages")
 
-    // Adding title to the element
-    let bookTitle = document.createElement('p')
-    bookTitle.textContent = book.title
+let cancelButton = document.getElementById('cancel-button')
+let createButton = document.getElementById('create-button')
 
-    // Adding author to the element
-    let bookAuthor = document.createElement('p')
-    bookAuthor.textContent = book.author
+let clearValues = function () {
+    titleInput.value = ''
+    authorInput.value = ''
+    pagesInput.value = ''
+}
 
-    // Adding publisher to the element
-    let bookPublisher = document.createElement('p')
-    bookPublisher.textContent = book.publisher
-    
-    // Read button
-    let readButtonContainer = document.createElement('div')
-    readButtonContainer.style.display = 'flex'
-    readButtonContainer.style.flexDirection = 'row'
+// Remove non-numeric characters using a regular expression
+pagesInput.addEventListener("input", function () {
+    pagesInput.value = pagesInput.value.replace(/\D/, '');
+});
 
-    let readButton = document.createElement('input')
-    readButton.setAttribute('type', 'checkbox')
-    let readButtonText  = document.createElement('p')
-    readButtonText.textContent = 'read?'
+createButton.addEventListener('click', () => {
+    if (titleInput.value.trim() !== "" && authorInput.value.trim() !== "" && pagesInput.value.trim() !== "") {
+        let userAddedBook = new Book(titleInput.value, authorInput.value, pagesInput.value)
+        addBookToLibrary(userAddedBook)
+        console.log(myLibrary)
+        displayBooks()
+        clearValues()
 
-    // Appending to readbutton
-    readButtonContainer.appendChild(readButton)
-    readButtonContainer.appendChild(readButtonText)
-
-    // remove button
-    let removeButton = document.createElement('button')
-    removeButton.textContent = 'Remove'
-
-    // Appending all elements
-    newBook.appendChild(bookTitle)
-    newBook.appendChild(bookAuthor)
-    newBook.appendChild(bookPublisher)
-    newBook.appendChild(readButtonContainer)
-    newBook.appendChild(removeButton)
-
-
-
-
-    return newBook
+    }
 })
 
-books.forEach(function (book) {
-    library.appendChild(book)
+let toggleNewBookMenu = document.getElementById('toggle-new-book-menu')
+toggleNewBookMenu.addEventListener('click', () => {
+    clearValues()
+    let newBookMenuContainer = document.getElementById('new-book-menu-container')
+    if (newBookMenuContainer.style.display === "none") {
+        // If it's currently hidden, make it visible
+        newBookMenuContainer.style.display = "flex"; // or "inline", "flex", etc. depending on your layout
+        console.log('asda')
+    } else {
+        // If it's currently visible, hide it
+        newBookMenuContainer.style.display = "none";
+    }
 })
 
-
-console.log(myLibrary)
+displayBooks()

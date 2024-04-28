@@ -10,9 +10,16 @@
 </head>
 
 <body>
-    <button>New Book</button>
-    <div class="library-container">
-        
+    <button id="toggle-new-book-menu">New Book</button>
+    <div class="library-container"></div>
+    <div id="new-book-menu-container" style="display: none;">
+        <p>title</p>
+        <input type="text" id="title" maxlength="150">
+        <p>author</p>
+        <input type="text" id="author" maxlength="50">
+        <p>pages</p>
+        <input type="text" id="pages">
+        <button id="create-button">create</button>
     </div>
 </body>
 

@@ -26,6 +26,7 @@ body>button {
     margin: 10px;
     padding: 10px 20px;
     color: white;
+    box-shadow: 7px 7px #3d3d3d;
 }
 
 .book > button {
